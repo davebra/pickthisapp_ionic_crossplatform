@@ -1,5 +1,7 @@
 {
   "name": "pickthisapp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }
