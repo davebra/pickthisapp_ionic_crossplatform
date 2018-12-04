@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>MyApp</name>
+<widget id="me.davebra.pickthisapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Pick This App</name>
     <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <author email="hello@davebra.me" href="https://davebra.me/">Davide Bragagnolo</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -82,9 +82,10 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-plugin-googlemaps" spec="2.4.6">
+    <plugin name="cordova-plugin-googlemaps" spec="https://github.com/mapsplugin/cordova-plugin-googlemaps">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U" />
     </plugin>
     <engine name="browser" spec="5.0.4" />
+    <engine name="ios" spec="4.5.5" />
 </widget>

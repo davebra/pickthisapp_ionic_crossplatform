@@ -1,16 +1,34 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Pick This App
     </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentFilters($event)">
+        <ion-icon ios="ios-funnel-outline" md="md-funnel"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
-  <div id="map_canvas">
-  </div>
+<ion-content>
+
+  <div #map_canvas style="height: 100%;"></div>
+  
+  <div id="map_cards">
+      <ion-slides (ionSlideDidChange)="slideChanged()">
+          <ion-slide *ngFor="let thing of things; let i = index" id="map-card-{{i}}">
+              <ion-card >
+                  <!--<img [src]="cat" class="slide-image"> -->
+                  <ion-card-content>
+                    <h2>
+                      Heading {{i}}
+                    </h2>
+                    <h3>Sub-heading {{i}}</h3>
+                  </ion-card-content>
+                </ion-card>
+          </ion-slide>
+        </ion-slides>
+    </div>
+
 </ion-content>
