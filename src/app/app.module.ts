@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { FilterPage } from '../pages/home/filter';
 import { AddPage } from '../pages/add/add';
 import { YourPage } from '../pages/your/your';
+import { ThingPage } from '../pages/thing/thing';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { GoogleMaps } from '@ionic-native/google-maps';
@@ -19,6 +20,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     HomePage,
     AddPage,
     YourPage,
+    ThingPage,
     FilterPage,
     TabsPage
   ],
@@ -32,6 +34,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     HomePage,
     AddPage,
     YourPage,
+    ThingPage,
     FilterPage,
     TabsPage
   ],

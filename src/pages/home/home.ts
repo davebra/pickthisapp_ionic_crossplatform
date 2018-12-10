@@ -6,6 +6,7 @@ import {
   GoogleMapOptions,
   CameraPosition,
   MarkerOptions,
+  MarkerCluster,
   Marker,
   Environment
 } from '@ionic-native/google-maps';
@@ -76,6 +77,8 @@ export class HomePage {
       this.things.push('first');
       this.addMarker(-37.814, 144.96020);
       this.things.push('second');
+
+
 
     });
   }
