@@ -8,4 +8,20 @@
 
 <ion-content padding>
 
+    <ion-grid>
+        <ion-row>
+          
+          <ion-col col-6 *ngFor="let picture of pictures; let i = index">
+            <div img-box>
+                <img [src]="DomSanitizer.bypassSecurityTrustUrl(picture)"/>
+            </div>
+          </ion-col>
+        
+        </ion-row>
+    </ion-grid>
+
+    <ion-slide id="picture-box-{{i}}">
+    
+      
+
 </ion-content>

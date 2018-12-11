@@ -1,3 +1,16 @@
 page-add {
+    .ion-row {
+        padding: 0 12px;
+    }
+    .ion-col {
+        padding: 5px 0;
+        .img-box{
+            width: 100%;
+            height: calc(width);
+            overflow: hidden;
 
+            img {
+            }
+        } 
+    }
 }
