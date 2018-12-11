@@ -6,22 +6,19 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
 
-    <ion-grid>
-        <ion-row>
-          
-          <ion-col col-6 *ngFor="let picture of pictures; let i = index">
-            <div img-box>
-                <img [src]="DomSanitizer.bypassSecurityTrustUrl(picture)"/>
-            </div>
-          </ion-col>
+  <div id="imgscroll">
         
-        </ion-row>
-    </ion-grid>
+    <div imgbox *ngFor="let picture of pictures; let i = index" [attr.ready]="scrollToTakePicture()">
+        <div imgcontent [style.background-image]="DomSanitizer.bypassSecurityTrustStyle('url('+picture+')')"></div>
+        <ion-icon class="imgdelete" name="md-remove-circle" (click)="removePicture(i)"></ion-icon>
+    </div>
 
-    <ion-slide id="picture-box-{{i}}">
-    
+    <div imgbox id="imgadd" (click)="onTakePicture()" *ngIf="pictures.length < 5">
+        <ion-icon name="camera"></ion-icon>
+    </div>
       
-
+  </div>    
+      
 </ion-content>

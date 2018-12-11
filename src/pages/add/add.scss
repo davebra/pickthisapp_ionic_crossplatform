@@ -1,16 +1,56 @@
 page-add {
-    .ion-row {
-        padding: 0 12px;
-    }
-    .ion-col {
-        padding: 5px 0;
-        .img-box{
-            width: 100%;
-            height: calc(width);
-            overflow: hidden;
 
-            img {
-            }
-        } 
+    #imgscroll {
+        background-color: #ddd;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
+
+    [imgbox] {
+        flex: 0 0 auto;
+        width: 30vw;
+        margin: 6px 6px 6px 0;
+        height: 30vw;
+        background: #fff;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 2px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+
+        &:first-child{
+            margin: 6px 6px 6px 6px;
+        }
+
+        &:last-child{
+            font-size: 3rem;
+        }
+
+        [imgcontent]{
+            border-radius: 2px;
+            height: 100%;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .imgdelete{
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            color: red;
+            font-size: 2rem;
+            text-shadow: 0 0 3px rgba(255,255,255,0.2);
+        }
+
+    } 
+    
 }

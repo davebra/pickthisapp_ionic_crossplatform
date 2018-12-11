@@ -86,7 +86,8 @@
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U" />
     </plugin>
+    <plugin name="cordova-plugin-camera" spec="4.0.3" />
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="4.5.5" />
-    <plugin name="cordova-plugin-camera" spec="4.0.3" />
+    <engine name="android" spec="7.1.4" />
 </widget>
