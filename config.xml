@@ -90,4 +90,14 @@
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />
+    <plugin name="cordova-plugin-facebook4" spec="3.2.0">
+        <variable name="APP_ID" value="123456789" />
+        <variable name="APP_NAME" value="Pick This App" />
+        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
+    </plugin>
+    <plugin name="cordova-plugin-googleplus" spec="6.0.0">
+        <variable name="REVERSED_CLIENT_ID" value="googlemyreversedclientid" />
+        <variable name="WEB_APPLICATION_CLIENT_ID" value="googlemywebclientid" />
+    </plugin>
+    <plugin name="cordova-sqlite-storage" spec="2.5.2" />
 </widget>

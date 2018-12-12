@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, ModalController, AlertController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-add',
@@ -10,13 +11,32 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class AddPage {
 
   private pictures = [];
+  private userid;
 
   constructor(
     public navCtrl: NavController,
+    public modalCtrl: ModalController,
     private camera: Camera,
     public alertCtrl: AlertController,
-    private DomSanitizer: DomSanitizer
+    private DomSanitizer: DomSanitizer,
+    private storage: Storage
     ) {
+  }
+
+  ionViewDidLoad() {
+    this.checkLogin();
+  }
+
+  checkLogin(){
+    this.storage.get('userid')
+    .then(val => { 
+      this.userid = val;
+    })
+    .catch(err => this.openLogin() );
+  }
+
+  openLogin(){
+    
   }
 
   onTakePicture() {
