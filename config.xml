@@ -97,7 +97,7 @@
     </plugin>
     <plugin name="cordova-plugin-googleplus" spec="6.0.0">
         <variable name="REVERSED_CLIENT_ID" value="googlemyreversedclientid" />
-        <variable name="WEB_APPLICATION_CLIENT_ID" value="googlemywebclientid" />
+        <variable name="WEB_APPLICATION_CLIENT_ID" value="481019688675-bd3r9mhgscfprjc2mi0ub5k4uvcacp7p.apps.googleusercontent.com" />
     </plugin>
     <plugin name="cordova-sqlite-storage" spec="2.5.2" />
 </widget>

@@ -9,6 +9,10 @@ import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { IonicStorageModule } from '@ionic/storage';
 
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { HttpClientModule } from '@angular/common/http';
+import { ApiProvider } from '../providers/api/api';
+
 import { HomePage } from '../pages/home/home';
 import { FilterPage } from '../pages/home/filter';
 import { AddPage } from '../pages/add/add';
@@ -16,8 +20,6 @@ import { YourPage } from '../pages/your/your';
 import { ThingPage } from '../pages/thing/thing';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
-
-import { GoogleMaps } from '@ionic-native/google-maps';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
@@ -53,7 +56,8 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     GooglePlus,
     SplashScreen,
     GoogleMaps,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ApiProvider
   ]
 })
 export class AppModule {}

@@ -13,6 +13,7 @@ import {
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, Platform, PopoverController, Slides } from 'ionic-angular';
 import { FilterPage } from './filter';
+import { ApiProvider } from './../../providers/api/api';
 
 @Component({
   selector: 'page-home',
@@ -33,7 +34,8 @@ export class HomePage {
     public navCtrl: NavController,
     private filterCtrl: PopoverController,
     private platform: Platform,
-    private googleMaps: GoogleMaps
+    private googleMaps: GoogleMaps, 
+    public apiProvider: ApiProvider
     ) {
       this.location = new LatLng(-37.814, 144.96332);
   }
@@ -78,6 +80,7 @@ export class HomePage {
       this.addMarker(-37.814, 144.96020);
       this.things.push('second');
 
+      //this.apiProvider.getFilms().then();
 
 
     });
