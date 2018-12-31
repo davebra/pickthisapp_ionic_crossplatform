@@ -53,13 +53,15 @@ export class HomePage {
    
   ionViewDidLoad() {
     this.loadMap();
+    console.log( process.env.RESTAPI_URL );
+
   }
 
   loadMap() {
 
     Environment.setEnv({
-      'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U',
-      'API_KEY_FOR_BROWSER_DEBUG': 'AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U'
+      'API_KEY_FOR_BROWSER_RELEASE': process.env.GMAPS_API_KEY_FOR_BROWSER_RELEASE,
+      'API_KEY_FOR_BROWSER_DEBUG': process.env.GMAPS_API_KEY_FOR_BROWSER_DEBUG
     });
 
     let element = this.mapElement.nativeElement;
@@ -80,7 +82,7 @@ export class HomePage {
       this.addMarker(-37.814, 144.96020);
       this.things.push('second');
 
-      //this.apiProvider.getFilms().then();
+      //this.apiProvider.getThings(-37.814, 144.96332, 30000).then((data) => {  });
 
 
     });
