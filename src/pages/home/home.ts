@@ -11,7 +11,7 @@ import {
   Environment
 } from '@ionic-native/google-maps';
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, Platform, PopoverController, Slides } from 'ionic-angular';
+import { NavController, Platform, PopoverController, Slides, ToastController } from 'ionic-angular';
 import { FilterPage } from './filter';
 import { ApiProvider } from './../../providers/api/api';
 
@@ -28,14 +28,17 @@ export class HomePage {
   private map:GoogleMap;
   private location:LatLng;
   private arrayMarkers = [];
-  private things = [];
+  private things = {};
+  Object = Object;
+  private toast;
 
   constructor(
     public navCtrl: NavController,
     private filterCtrl: PopoverController,
     private platform: Platform,
     private googleMaps: GoogleMaps, 
-    public apiProvider: ApiProvider
+    public apiProvider: ApiProvider,
+    public toastCtrl: ToastController
     ) {
       this.location = new LatLng(-37.814, 144.96332);
   }
@@ -43,8 +46,8 @@ export class HomePage {
   presentFilters(ev) {
 
     let popover = this.filterCtrl.create(FilterPage, {
-    // contentEle: this.content.nativeElement,
-    // textEle: this.text.nativeElement
+    //contentEle: this.content.nativeElement,
+    //textEle: this.text.nativeElement
     });
     popover.present({
       ev: ev
@@ -53,11 +56,15 @@ export class HomePage {
    
   ionViewDidLoad() {
     this.loadMap();
-    console.log( process.env.RESTAPI_URL );
-
   }
 
   loadMap() {
+
+    this.toast = this.toastCtrl.create({
+      message: 'Please zoom in to search in that area.',
+      position: 'bottom',
+      dismissOnPageChange: true
+    });
 
     Environment.setEnv({
       'API_KEY_FOR_BROWSER_RELEASE': process.env.GMAPS_API_KEY_FOR_BROWSER_RELEASE,
@@ -69,22 +76,40 @@ export class HomePage {
     this.map = GoogleMaps.create(element);
 
     this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-      
-      let options = {
+      this.map.moveCamera({
         target: this.location,
         zoom: 12
-      };
+      });
+    });
 
-      this.map.moveCamera(options);
+    this.map.on(GoogleMapsEvent.CAMERA_MOVE_END).subscribe((camera) => {
+      this.loadThings(
+        camera[0].target.lat, 
+        camera[0].target.lng, 
+        this.calculateRadius(
+          camera[0].northeast.lat,
+          camera[0].northeast.lng,
+          camera[0].southwest.lat,
+          camera[0].southwest.lng
+        )
+      );
+    });
 
-      this.addMarker(-37.814, 144.96846);
-      this.things.push('first');
-      this.addMarker(-37.814, 144.96020);
-      this.things.push('second');
+  }
 
-      //this.apiProvider.getThings(-37.814, 144.96332, 30000).then((data) => {  });
-
-
+  loadThings(centreLat, centreLng, radius){
+    this.apiProvider.getThings(centreLat, centreLng, radius).then(res => {
+      if(res['status'] === 'success'){
+        this.toast.dismiss();
+        res['data'].forEach(thing => {
+          if (!this.things.hasOwnProperty(thing._id)) {
+            this.things[thing._id] = thing;
+            this.addMarker(thing.location.coordinates[1], thing.location.coordinates[0]);
+          }
+        });
+      } else {
+        this.toast.present();
+      }
     });
   }
 
@@ -130,6 +155,26 @@ export class HomePage {
     }
     this.arrayMarkers[currentIndex].setIcon('red');
     this.map.setCameraTarget( this.arrayMarkers[currentIndex].getPosition() );
+  }
+
+  calculateRadius(lat1, lon1, lat2, lon2) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+    }
+    else {
+      var radlat1 = Math.PI * lat1/180;
+      var radlat2 = Math.PI * lat2/180;
+      var theta = lon1-lon2;
+      var radtheta = Math.PI * theta/180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515 * 1609.344;
+      return dist;
+    }
   }
 
 }
