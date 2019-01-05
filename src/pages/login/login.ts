@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { ViewController, AlertController } from 'ionic-angular';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-login',
@@ -10,11 +9,10 @@ import { Storage } from '@ionic/storage';
 })
 export class LoginPage {
 
-    constructor(public navCtrl: NavController, 
+    constructor(public viewCtrl: ViewController, 
         public alertCtrl: AlertController,
         private fb: Facebook,
-        private googlePlus: GooglePlus,
-        private storage: Storage) {
+        private googlePlus: GooglePlus) {
     }
 
     facebookLogin(){
@@ -24,7 +22,10 @@ export class LoginPage {
     }
 
     googleLogin(){
-        this.googlePlus.login({})
+        this.googlePlus.login({
+            'webClientId': '879252245494-1fesbuajkhkr8690j99i3ekmu9bspc70.apps.googleusercontent.com',
+            'offline': true
+          })
         .then(res => this.loginSuccess('google', res))
         .catch(err => this.loginError('google', err));
     }
@@ -35,11 +36,48 @@ export class LoginPage {
 
     loginSuccess(provider, res){
         console.log(res);
-        this.storage.set('userid', '123456789');
-        this.storage.set('provider', provider);
-        this.storage.set('providerid', res);
-        this.storage.set('useremail', res);
-        this.storage.set('userfullname', res);
+
+        window.localStorage.provider = provider;
+
+        switch(provider){
+            case 'google':
+            window.localStorage.userid = res.email;
+            window.localStorage.providerid = res.userId;
+            window.localStorage.useremail = res.email;
+            window.localStorage.userfullname = res.displayName;
+            this.viewCtrl.dismiss(window.localStorage.userid);
+            break;
+
+            case 'facebook':
+            // The connection was successful
+            if(res.status == "connected") {
+
+                // Get user infos from the API
+                this.fb.api("/me?fields=name,email", []).then((user) => {
+
+                    window.localStorage.userid = (user.email) ? user.email : res.authResponse.userID;
+                    window.localStorage.providerid = res.authResponse.userID;
+                    window.localStorage.useremail = user.email;
+                    window.localStorage.userfullname = user.name;    
+                    this.viewCtrl.dismiss(window.localStorage.userid);
+
+                });
+            } 
+            // An error occurred while loging-in
+            else {
+                this.loginError('facebook', "An error occurred...")
+            }
+            break;
+
+            case 'test':
+            window.localStorage.userid = '1e6a8e52-bdca-57eb-accb-d02ee2c18a42';
+            window.localStorage.providerid = 'test';
+            window.localStorage.useremail = 'test@test.com';
+            window.localStorage.userfullname = 'Test User';
+            this.viewCtrl.dismiss(window.localStorage.userid);
+            break;
+        }
+
     }
 
     loginError(provider, err){
@@ -53,10 +91,8 @@ export class LoginPage {
     }
 
     logout(){
-        let provider;
-        this.storage.get('user_id').then(val => { provider = val; });
 
-        switch(provider){
+        switch(window.localStorage.provider){
             case 'google':
             this.googlePlus.logout();
 
@@ -69,12 +105,18 @@ export class LoginPage {
             break;
         }
 
-        this.storage.remove('userid');
-        this.storage.remove('provider');
-        this.storage.remove('providerid');
-        this.storage.remove('useremail');
-        this.storage.remove('userfullname');
+        window.localStorage.removeItem("userid");
+        window.localStorage.removeItem("provider");
+        window.localStorage.removeItem("providerid");
+        window.localStorage.removeItem("useremail");
+        window.localStorage.removeItem("userfullname");
+
+        this.viewCtrl.dismiss(false);
+
     }
 
+    dismiss() {
+        this.viewCtrl.dismiss(false);
+    }
 
 }

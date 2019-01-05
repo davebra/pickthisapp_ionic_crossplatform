@@ -7,7 +7,6 @@ import { MyApp } from './app.component';
 import { Camera } from '@ionic-native/camera';
 import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
-import { IonicStorageModule } from '@ionic/storage';
 
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,8 +34,7 @@ import { LoginPage } from '../pages/login/login';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicModule.forRoot(MyApp,{tabsHideOnSubPages: false})
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -36,9 +36,9 @@
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-facebook4": "3.2.0",
     "cordova-plugin-googlemaps": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git",
-    "cordova-plugin-googleplus": "6.0.0",
+    "cordova-plugin-googleplus": "5.3.2",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
-    "cordova-plugin-ionic-webview": "^2.3.1",
+    "cordova-plugin-ionic-webview": "2.3.1",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
@@ -65,19 +65,22 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-facebook4": {
-        "APP_ID": "123456789",
-        "APP_NAME": "Pick This App",
+        "APP_ID": "343592929705599",
+        "APP_NAME": "PickThisApp",
         "FACEBOOK_ANDROID_SDK_VERSION": "4.38.1"
       },
-      "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "googlemyreversedclientid",
-        "WEB_APPLICATION_CLIENT_ID": "googlemywebclientid"
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova-sqlite-storage": {}
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.879252245494-ee3djcmpqf0uv6tl4l6rlc9d9obcob05",
+        "WEB_APPLICATION_CLIENT_ID": "879252245494-1fesbuajkhkr8690j99i3ekmu9bspc70.apps.googleusercontent.com",
+        "PLAY_SERVICES_VERSION": "11.8.0"
+      }
     },
     "platforms": [
       "browser",

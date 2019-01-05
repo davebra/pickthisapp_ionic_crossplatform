@@ -1,18 +1,23 @@
-<ion-header>
-    <ion-navbar>
-      <ion-title>
-        Login / Signup
-      </ion-title>
-    </ion-navbar>
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons start>
+        <button ion-button icon-only (click)="dismiss()">
+          Close
+        </button>
+      </ion-buttons>
+  
+      <ion-title>Login / Signup</ion-title>
+    
+    </ion-toolbar>
   </ion-header>
   
   <ion-content padding>
 
     <h2>Login to Pick This App</h2>
     
-    <button ion-button block large (click)="facebookLogin()"><ion-icon name="logo-facebook"></ion-icon> Login with Facebook</button>
+    <button ion-button block large (click)="facebookLogin()"><ion-icon name="logo-facebook"></ion-icon>&nbsp;&nbsp;Login with Facebook</button>
 
-    <button ion-button block large (click)="googleLogin()"><ion-icon name="logo-google"></ion-icon> Login with Google</button>
+    <button ion-button block large (click)="googleLogin()"><ion-icon name="logo-google"></ion-icon>&nbsp;&nbsp;Login with Google</button>
 
     <button ion-button block large (click)="testLogin()">Test Login</button>
 

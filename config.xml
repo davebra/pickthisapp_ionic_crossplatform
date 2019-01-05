@@ -80,24 +80,31 @@
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-googlemaps" spec="https://github.com/mapsplugin/cordova-plugin-googlemaps">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U" />
     </plugin>
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
+    <plugin name="cordova-sqlite-storage" spec="2.5.2" />
+    <plugin name="cordova-plugin-ionic-webview" spec="2.3.1">
+        <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
+    </plugin>
+    <plugin name="cordova-plugin-facebook4" spec="3.2.0">
+        <variable name="APP_ID" value="343592929705599" />
+        <variable name="APP_NAME" value="PickThisApp" />
+        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
+    </plugin>
+    <config-file parent="/resources" target="./res/values/strings.xml">
+        <string name="fb_app_id">343592929705599</string>
+        <string name="fb_app_name">PickThisApp</string>
+    </config-file>
+    <plugin name="cordova-plugin-googleplus" spec="5.3.2">
+        <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.879252245494-ee3djcmpqf0uv6tl4l6rlc9d9obcob05" />
+        <variable name="WEB_APPLICATION_CLIENT_ID" value="879252245494-1fesbuajkhkr8690j99i3ekmu9bspc70.apps.googleusercontent.com" />
+        <variable name="PLAY_SERVICES_VERSION" value="11.8.0" />
+    </plugin>
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />
-    <plugin name="cordova-plugin-facebook4" spec="3.2.0">
-        <variable name="APP_ID" value="343592929705599" />
-        <variable name="APP_NAME" value="Pick This App" />
-        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
-    </plugin>
-    <plugin name="cordova-plugin-googleplus" spec="6.0.0">
-        <variable name="REVERSED_CLIENT_ID" value="googlemyreversedclientid" />
-        <variable name="WEB_APPLICATION_CLIENT_ID" value="481019688675-bd3r9mhgscfprjc2mi0ub5k4uvcacp7p.apps.googleusercontent.com" />
-    </plugin>
-    <plugin name="cordova-sqlite-storage" spec="2.5.2" />
 </widget>

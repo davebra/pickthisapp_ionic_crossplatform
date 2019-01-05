@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, AlertController } from 'ionic-angular';
+import { NavController, ModalController, AlertController, Tabs } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Storage } from '@ionic/storage';
+import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-add',
@@ -11,31 +10,37 @@ import { Storage } from '@ionic/storage';
 export class AddPage {
 
   private pictures = [];
-  private userid;
+  private userid = window.localStorage.usersid || false;
 
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
     private camera: Camera,
-    public alertCtrl: AlertController,
-    private DomSanitizer: DomSanitizer,
-    private storage: Storage
+    public alertCtrl: AlertController
     ) {
   }
 
   ionViewDidLoad() {
+  }
+
+  ionViewWillEnter(){
     this.checkLogin();
   }
 
   checkLogin(){
-    this.storage.get('userid')
-    .then(val => { 
-      this.userid = val;
-    })
-    .catch(err => this.openLogin() );
-  }
-
-  openLogin(){
+    
+    if(!this.userid){
+      let profileModal = this.modalCtrl.create(LoginPage);
+      profileModal.onDidDismiss((data:any) => {
+        if(!data){
+          var t: Tabs = this.navCtrl.parent;
+          t.select(0);
+        } else {
+          this.userid = data;
+        }
+      });
+      profileModal.present();
+    }
     
   }
 

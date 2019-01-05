@@ -13,6 +13,7 @@ import {
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, Platform, PopoverController, Slides, ToastController } from 'ionic-angular';
 import { FilterPage } from './filter';
+import { ThingPage } from '../thing/thing';
 import { ApiProvider } from './../../providers/api/api';
 
 @Component({
@@ -142,6 +143,10 @@ export class HomePage {
       this.arrayMarkers[i].setIcon('blue');
     }
 
+  }
+
+  goToOtherPage() {
+    this.navCtrl.push(ThingPage);
   }
 
   goToSlide(i) {
