@@ -3,18 +3,14 @@ import {
   GoogleMap,
   LatLng,
   GoogleMapsEvent,
-  GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
-  MarkerCluster,
-  Marker,
   Environment
 } from '@ionic-native/google-maps';
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, Platform, PopoverController, Slides, ToastController } from 'ionic-angular';
+import { NavController, PopoverController, Slides, ToastController } from 'ionic-angular';
 import { FilterPage } from './filter';
 import { ThingPage } from '../thing/thing';
 import { ApiProvider } from './../../providers/api/api';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -31,18 +27,29 @@ export class HomePage {
   private arrayMarkers = [];
   private things = {};
   Object = Object;
-  private toast;
+  private toastZoom;
+  private toastNoThings;
 
   constructor(
     public navCtrl: NavController,
-    private filterCtrl: PopoverController,
-    private platform: Platform,
-    private googleMaps: GoogleMaps, 
+    public filterCtrl: PopoverController,
+    public googleMaps: GoogleMaps, 
     public apiProvider: ApiProvider,
+    public storage: Storage,
     public toastCtrl: ToastController
     ) {
       this.location = new LatLng(-37.814, 144.96332);
-  }
+      this.toastZoom = this.toastCtrl.create({
+        message: 'Please zoom in to search in this area.',
+        position: 'bottom',
+        dismissOnPageChange: true
+      });
+      this.toastNoThings = this.toastCtrl.create({
+        message: 'No things in this area.',
+        position: 'bottom',
+        dismissOnPageChange: true
+      });
+    }
 
   presentFilters(ev) {
 
@@ -61,12 +68,6 @@ export class HomePage {
 
   loadMap() {
 
-    this.toast = this.toastCtrl.create({
-      message: 'Please zoom in to search in that area.',
-      position: 'bottom',
-      dismissOnPageChange: true
-    });
-
     Environment.setEnv({
       'API_KEY_FOR_BROWSER_RELEASE': process.env.GMAPS_API_KEY_FOR_BROWSER_RELEASE,
       'API_KEY_FOR_BROWSER_DEBUG': process.env.GMAPS_API_KEY_FOR_BROWSER_DEBUG
@@ -74,7 +75,7 @@ export class HomePage {
 
     let element = this.mapElement.nativeElement;
     
-    this.map = GoogleMaps.create(element);
+    this.map =this.googleMaps.create(element);
 
     this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
       this.map.moveCamera({
@@ -101,7 +102,12 @@ export class HomePage {
   loadThings(centreLat, centreLng, radius){
     this.apiProvider.getThings(centreLat, centreLng, radius).then(res => {
       if(res['status'] === 'success'){
-        this.toast.dismiss();
+        this.toastZoom.dismiss();
+        if ( res['data'].length > 0 ){
+          this.toastNoThings.dismiss();
+        } else {
+          this.toastNoThings.present();
+        }
         res['data'].forEach(thing => {
           if (!this.things.hasOwnProperty(thing._id)) {
             this.things[thing._id] = thing;
@@ -109,7 +115,7 @@ export class HomePage {
           }
         });
       } else {
-        this.toast.present();
+        this.toastZoom.present();
       }
     });
   }
@@ -145,8 +151,8 @@ export class HomePage {
 
   }
 
-  goToOtherPage() {
-    this.navCtrl.push(ThingPage);
+  goToThing(key) {
+    this.navCtrl.push(ThingPage, { "thing": this.things[key] });
   }
 
   goToSlide(i) {

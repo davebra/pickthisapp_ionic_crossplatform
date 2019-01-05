@@ -7,10 +7,13 @@ import { MyApp } from './app.component';
 import { Camera } from '@ionic-native/camera';
 import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule} from '@angular/http';
 import { ApiProvider } from '../providers/api/api';
+import { IonTagsInputModule } from "ionic-tags-input";
 
 import { HomePage } from '../pages/home/home';
 import { FilterPage } from '../pages/home/filter';
@@ -34,7 +37,13 @@ import { LoginPage } from '../pages/login/login';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp,{tabsHideOnSubPages: false})
+    HttpModule,
+    IonTagsInputModule,
+    IonicModule.forRoot(MyApp,{tabsHideOnSubPages: false}),
+    IonicStorageModule.forRoot({
+      name: '__ptadb',
+         driverOrder: ['indexeddb', 'websql', 'sqlite']
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

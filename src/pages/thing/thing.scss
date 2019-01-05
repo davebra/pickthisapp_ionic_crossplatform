@@ -1,3 +1,13 @@
 page-thing {
+    #slideshow{
+        height: 50vh;
+        background-color: #000;
+        img{
+            object-fit: contain;
+        }
+    }
 
+    .tag{
+        display: inline-block;
+    }
 }

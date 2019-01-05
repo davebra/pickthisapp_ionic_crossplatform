@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ViewController, AlertController } from 'ionic-angular';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-login',
@@ -11,7 +13,9 @@ export class LoginPage {
 
     constructor(public viewCtrl: ViewController, 
         public alertCtrl: AlertController,
+        private storage: Storage,
         private fb: Facebook,
+        public http: Http,
         private googlePlus: GooglePlus) {
     }
 
@@ -35,17 +39,15 @@ export class LoginPage {
     }
 
     loginSuccess(provider, res){
-        console.log(res);
-
-        window.localStorage.provider = provider;
 
         switch(provider){
             case 'google':
-            window.localStorage.userid = res.email;
-            window.localStorage.providerid = res.userId;
-            window.localStorage.useremail = res.email;
-            window.localStorage.userfullname = res.displayName;
-            this.viewCtrl.dismiss(window.localStorage.userid);
+            this.authRestApi(
+                provider,
+                res.userId,
+                res.email,
+                res.displayName
+            );
             break;
 
             case 'facebook':
@@ -54,13 +56,12 @@ export class LoginPage {
 
                 // Get user infos from the API
                 this.fb.api("/me?fields=name,email", []).then((user) => {
-
-                    window.localStorage.userid = (user.email) ? user.email : res.authResponse.userID;
-                    window.localStorage.providerid = res.authResponse.userID;
-                    window.localStorage.useremail = user.email;
-                    window.localStorage.userfullname = user.name;    
-                    this.viewCtrl.dismiss(window.localStorage.userid);
-
+                    this.authRestApi(
+                        provider,
+                        res.authResponse.userID,
+                        res.email,
+                        res.name
+                    );
                 });
             } 
             // An error occurred while loging-in
@@ -70,13 +71,44 @@ export class LoginPage {
             break;
 
             case 'test':
-            window.localStorage.userid = '1e6a8e52-bdca-57eb-accb-d02ee2c18a42';
-            window.localStorage.providerid = 'test';
-            window.localStorage.useremail = 'test@test.com';
-            window.localStorage.userfullname = 'Test User';
-            this.viewCtrl.dismiss(window.localStorage.userid);
+            this.authRestApi(
+                provider,
+                'testid1',
+                'tes1t@test1.test',
+                'Test1 User'
+            );
             break;
         }
+
+    }
+
+    authRestApi( provider, providerid, useremail, userfullname ){
+
+        this.storage.set('provier', provider);
+        this.storage.set('providerid', providerid);
+        this.storage.set('useremail', useremail);
+        this.storage.set('userfullname', userfullname);  
+
+        var headers = new Headers();
+        headers.append("Accept", 'application/json');
+        headers.append('Content-Type', 'application/json' );
+        const requestOptions = new RequestOptions({ headers: headers });
+
+        let postData = {
+                "provider": provider,
+                "providerid": providerid,
+                "email": useremail,
+                "fullname": userfullname
+        }
+
+        this.http.post( process.env.RESTAPI_URL + "/user", postData, requestOptions)
+        .subscribe(data => {
+            console.log(data);
+            this.storage.set('userid', JSON.parse(data['_body']).data);  
+            this.viewCtrl.dismiss(true);
+        }, error => {
+            console.log(error);
+        });
 
     }
 
@@ -105,12 +137,7 @@ export class LoginPage {
             break;
         }
 
-        window.localStorage.removeItem("userid");
-        window.localStorage.removeItem("provider");
-        window.localStorage.removeItem("providerid");
-        window.localStorage.removeItem("useremail");
-        window.localStorage.removeItem("userfullname");
-
+        this.storage.clear();
         this.viewCtrl.dismiss(false);
 
     }

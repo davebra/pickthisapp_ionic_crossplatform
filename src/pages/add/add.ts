@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController, Tabs } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { LoginPage } from '../login/login';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-add',
@@ -10,12 +11,12 @@ import { LoginPage } from '../login/login';
 export class AddPage {
 
   private pictures = [];
-  private userid = window.localStorage.usersid || false;
 
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
     private camera: Camera,
+    private storage: Storage,
     public alertCtrl: AlertController
     ) {
   }
@@ -28,19 +29,19 @@ export class AddPage {
   }
 
   checkLogin(){
-    
-    if(!this.userid){
-      let profileModal = this.modalCtrl.create(LoginPage);
-      profileModal.onDidDismiss((data:any) => {
-        if(!data){
-          var t: Tabs = this.navCtrl.parent;
-          t.select(0);
-        } else {
-          this.userid = data;
-        }
-      });
-      profileModal.present();
-    }
+
+    this.storage.get("userid").then((val) => {
+      if(typeof val !== "string"){
+        let profileModal = this.modalCtrl.create(LoginPage);
+        profileModal.onDidDismiss((data:any) => {
+          if(!data){
+            var t: Tabs = this.navCtrl.parent;
+            t.select(0);
+          }
+        });
+        profileModal.present();
+      }
+    });
     
   }
 
