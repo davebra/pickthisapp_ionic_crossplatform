@@ -2,17 +2,21 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, Tabs } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
+import { ApiProvider } from '../../providers/api/api';
 
 @Component({
   selector: 'page-your',
   templateUrl: 'your.html'
 })
 export class YourPage {
-
+  Object = Object;
+  public things = [];
+  public thingscount = 'loading...';
 
   constructor(
     public navCtrl: NavController,
     public storage: Storage,
+    public apiProvider: ApiProvider,
     public modalCtrl: ModalController,
     ) {
 
@@ -34,9 +38,20 @@ export class YourPage {
           }
         });
         profileModal.present();
+      } else {
+        this.loadUserThings(val);
       }
     });
     
+  }
+
+  loadUserThings(userid){
+    this.apiProvider.getUserThings(userid).then(res => {
+      if(res['status'] === 'success'){
+        this.thingscount = res['data'].length;
+        this.things = res['data'];
+      }
+    });
   }
 
 }

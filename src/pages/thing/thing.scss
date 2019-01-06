@@ -9,5 +9,12 @@ page-thing {
 
     .tag{
         display: inline-block;
+        text-transform: capitalize;
+        background-color: color($colors, light, base);
+        margin: 0 10px 10px 0;
+        font-size: 1.7rem;
+        color: color($colors, dark, base);
+        padding: 4px 8px;
+        border-radius: 4px;
     }
 }

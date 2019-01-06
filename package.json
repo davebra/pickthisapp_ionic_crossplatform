@@ -12,31 +12,40 @@
     "browser": "ionic-app-scripts serve --sourceMap source-map --iscordovaserve --wwwDir platforms/browser/www/ --buildDir platforms/browser/www/build"
   },
   "dependencies": {
-    "@angular/animations": "5.2.11",
-    "@angular/common": "5.2.11",
+    "@angular/animations": "^5.2.11",
+    "@angular/common": "^5.2.11",
     "@angular/compiler": "5.2.11",
     "@angular/compiler-cli": "5.2.11",
     "@angular/core": "5.2.11",
-    "@angular/forms": "5.2.11",
+    "@angular/forms": "^5.2.11",
     "@angular/http": "5.2.11",
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
-    "@ionic-native/camera": "^4.18.0",
-    "@ionic-native/core": "^4.18.0",
+    "@ionic-native/camera": "^4.19.0",
+    "@ionic-native/core": "^4.19.0",
     "@ionic-native/facebook": "^4.18.0",
-    "@ionic-native/google-maps": "^4.15.1",
+    "@ionic-native/file": "^4.19.0",
+    "@ionic-native/file-path": "^4.19.0",
+    "@ionic-native/geolocation": "^4.19.0",
     "@ionic-native/google-plus": "^4.18.0",
+    "@ionic-native/launch-navigator": "^4.19.0",
     "@ionic-native/splash-screen": "~4.17.0",
     "@ionic-native/status-bar": "~4.17.0",
+    "@ionic-native/transfer": "^3.14.0",
     "@ionic/storage": "^2.2.0",
     "cordova-android": "7.1.4",
     "cordova-browser": "5.0.4",
     "cordova-ios": "4.5.5",
-    "cordova-plugin-camera": "4.0.3",
+    "cordova-plugin-actionsheet": "2.3.3",
+    "cordova-plugin-camera": "git+https://github.com/apache/cordova-plugin-camera.git",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-dialogs": "2.0.1",
     "cordova-plugin-facebook4": "3.2.0",
-    "cordova-plugin-googlemaps": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git",
-    "cordova-plugin-googleplus": "5.3.2",
+    "cordova-plugin-file": "6.0.1",
+    "cordova-plugin-file-transfer": "1.7.1",
+    "cordova-plugin-filepath": "1.5.1",
+    "cordova-plugin-geolocation": "4.0.1",
+    "cordova-plugin-googleplus": "git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "2.3.1",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -47,8 +56,11 @@
     "ionic-angular": "3.9.2",
     "ionic-tags-input": "^0.1.2",
     "ionicons": "3.0.0",
+    "ngx-chips": "^1.9.8",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": "4.2.2",
+    "uuid": "^3.3.2",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
@@ -58,16 +70,11 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U",
-        "API_KEY_FOR_IOS": "AIzaSyBpSKqvjZVPCqOx3PAy5U1bBh0dX1DlI2U"
-      },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-camera": {},
       "cordova-plugin-facebook4": {
         "APP_ID": "343592929705599",
         "APP_NAME": "PickThisApp",
@@ -77,11 +84,22 @@
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "cordova-plugin-googleplus": {
         "REVERSED_CLIENT_ID": "com.googleusercontent.apps.879252245494-ee3djcmpqf0uv6tl4l6rlc9d9obcob05",
         "WEB_APPLICATION_CLIENT_ID": "879252245494-1fesbuajkhkr8690j99i3ekmu9bspc70.apps.googleusercontent.com",
         "PLAY_SERVICES_VERSION": "11.8.0"
-      }
+      },
+      "uk.co.workingedge.phonegap.plugin.launchnavigator": {
+        "OKHTTP_VERSION": "3.+",
+        "LOCATION_USAGE_DESCRIPTION": "This app requires access to your location for navigation purposes"
+      },
+      "cordova-plugin-geolocation": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-file-transfer": {},
+      "cordova-plugin-filepath": {}
     },
     "platforms": [
       "browser",

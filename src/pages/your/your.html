@@ -7,11 +7,24 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+    <ion-list>
+        <ion-list-header>
+            Your posted things: {{thingscount}}
+          </ion-list-header>
+
+        <ion-item-sliding *ngFor="let key of Object.keys(things)" id="map-card-{{key}}" #item>
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="img/thumbnail-totoro.png">
+            </ion-thumbnail>
+            <h2>My Neighbor Totoro</h2>
+            <p>Hayao Miyazaki • 1988</p>
+            <button ion-button clear item-end>View</button>
+          </ion-item>
+          <ion-item-options side="left">
+            <button ion-button color="danger" (click)="deleteThing(key)"><ion-icon name="trash"></ion-icon></button>
+          </ion-item-options>
+        </ion-item-sliding>
+
+      </ion-list>
 </ion-content>

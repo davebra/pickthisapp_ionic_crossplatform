@@ -17,17 +17,14 @@
   </div>
 
   <div padding>
-      <h3>Availability: {{availability}}</h3>
-      <h3>What's in here:</h3>
+    <h4>Availability: {{availability}}</h4>
+    <h4>What's in here:</h4>
     <span *ngFor="let tag of tags" class="tag">{{tag}}</span>
-    <ion-tags-input [(ngModel)]="tags"></ion-tags-input>
-
   </div>
 
   <div padding>
-      <button ion-button full>Drive me here</button>
-      <button ion-button full>Update this thing</button>
-      <button ion-button full color="danger">Report spam or inapproriate</button>
+      <button ion-button full (click)="openTheNavigator()">Drive me here</button>
+      <button ion-button full color="danger">Report inapproriate</button>
   </div>
   
 </ion-content>

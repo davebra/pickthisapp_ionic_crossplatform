@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, AlertController } from 'ionic-angular';
 import { GooglePlus } from '@ionic-native/google-plus';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { ApiProvider } from './../../providers/api/api';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { Storage } from '@ionic/storage';
 
@@ -15,7 +15,7 @@ export class LoginPage {
         public alertCtrl: AlertController,
         private storage: Storage,
         private fb: Facebook,
-        public http: Http,
+        public apiProvider: ApiProvider,
         private googlePlus: GooglePlus) {
     }
 
@@ -89,25 +89,13 @@ export class LoginPage {
         this.storage.set('useremail', useremail);
         this.storage.set('userfullname', userfullname);  
 
-        var headers = new Headers();
-        headers.append("Accept", 'application/json');
-        headers.append('Content-Type', 'application/json' );
-        const requestOptions = new RequestOptions({ headers: headers });
-
-        let postData = {
-                "provider": provider,
-                "providerid": providerid,
-                "email": useremail,
-                "fullname": userfullname
-        }
-
-        this.http.post( process.env.RESTAPI_URL + "/user", postData, requestOptions)
-        .subscribe(data => {
-            console.log(data);
-            this.storage.set('userid', JSON.parse(data['_body']).data);  
-            this.viewCtrl.dismiss(true);
-        }, error => {
-            console.log(error);
+        this.apiProvider.loginUser(provider, providerid, useremail, userfullname).then(res => {
+            if(res['status'] === 'success'){
+                this.storage.set('userid', res['data']);  
+                this.viewCtrl.dismiss(true);
+            } else {
+                console.log(res);
+            }
         });
 
     }

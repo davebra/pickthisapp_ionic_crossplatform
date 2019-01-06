@@ -17,4 +17,94 @@ export class ApiProvider {
         });
     }
 
+    loginUser(provider, providerid, useremail, userfullname) {
+        return new Promise((resolve, reject) => {
+
+            let postData = {
+                "provider": provider,
+                "providerid": providerid,
+                "email": useremail,
+                "fullname": userfullname
+            }
+
+            this.http.post( process.env.RESTAPI_URL + "/user", postData)
+            .subscribe(res => {
+                resolve(res);
+            }, error => {
+                reject(error);
+            });
+
+        });
+    }
+
+    getUserThings(userid) {
+        return new Promise((resolve, reject) => {
+          this.http.get( process.env.RESTAPI_URL + '/userthings/' + userid )
+            .subscribe(res => {
+                resolve(res);
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    deleteThings(thingid, userid) {
+        return new Promise((resolve, reject) => {
+
+            let postData = {
+                "userid": userid,
+                "status": "deleted"
+            }
+    
+            this.http.post( process.env.RESTAPI_URL + "/things/" + thingid, postData)
+            .subscribe(res => {
+                resolve(res);
+            }, error => {
+                reject(error);
+            });
+
+        });
+    }
+
+
+    uploadImage(file, userid) {
+        return new Promise((resolve, reject) => {
+
+            let postData = {
+                "userid": userid,
+                "status": "deleted"
+            }
+    
+            this.http.post( process.env.RESTAPI_URL + "/things", postData)
+            .subscribe(res => {
+                resolve(res);
+            }, error => {
+                reject(error);
+            });
+
+        });
+    }
+
+    addThings(userid, type, lat, lng, tags, images) {
+        return new Promise((resolve, reject) => {
+
+            let postData = {
+                "user": userid,
+                "type": type,
+                "lat":lat,
+                "lng": lng,
+                "tags": tags,
+                "images": images
+            }
+    
+            this.http.post( process.env.RESTAPI_URL + "/things", postData)
+            .subscribe(res => {
+                resolve(res);
+            }, error => {
+                reject(error);
+            });
+
+        });
+    }
+
 }
