@@ -4,6 +4,12 @@ import { AddPage } from '../add/add';
 import { YourPage } from '../your/your';
 import { HomePage } from '../home/home';
 
+/**
+ * 
+ * Class for the TabsPage
+ * 
+ */
+
 @Component({
   templateUrl: 'tabs.html'
 })

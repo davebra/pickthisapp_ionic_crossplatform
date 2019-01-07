@@ -4,16 +4,22 @@ import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
 import { ApiProvider } from '../../providers/api/api';
 
+/**
+ * 
+ * Class for the YourPage
+ * 
+ */
+
 @Component({
   selector: 'page-your',
   templateUrl: 'your.html'
 })
 export class YourPage {
-  Object = Object;
-  imagesBaseUrl = process.env.S3_BUCKET_URL;
-  private things = {};
-  public userid;
-  public thingscount = 'loading...';
+  Object = Object; // pass Object for angular template
+  imagesBaseUrl = process.env.S3_BUCKET_URL; // image base path from S3
+  private things = {}; // array for things
+  public userid; // user id
+  public thingscount = 'loading...'; // things count for template
 
   constructor(
     public navCtrl: NavController,
@@ -28,6 +34,7 @@ export class YourPage {
     this.checkLogin();
   }
 
+  // check the login, obviously, you need to be logged in to fetch your posted things
   checkLogin(){
     this.storage.get("userid").then((val) => {
       if(typeof val !== "string"){
@@ -46,6 +53,7 @@ export class YourPage {
     });
   }
 
+  // get the user things from the RestAPI
   loadUserThings(userid){
     this.apiProvider.getUserThings(userid).then(res => {
       if(res['status'] === 'success'){
@@ -59,6 +67,7 @@ export class YourPage {
     });
   }
 
+  // delete is clicked, update the status on the RestAPI
   deleteThing(thingid, slidingItem: ItemSliding){
     this.apiProvider.changeThingStatus(thingid, this.userid, 'deleted').then(res => {
       slidingItem.close();
@@ -68,6 +77,7 @@ export class YourPage {
     });
   }
 
+  // pause is clicked, update the status on the RestAPI
   pauseThing(thingid, slidingItem: ItemSliding){
     this.apiProvider.changeThingStatus(thingid, this.userid, 'paused').then(res => {
       slidingItem.close();
@@ -77,6 +87,7 @@ export class YourPage {
     });
   }
 
+  // play is clicked, update the status on the RestAPI
   playThing(thingid, slidingItem: ItemSliding){
     this.apiProvider.changeThingStatus(thingid, this.userid, 'live').then(res => {
       slidingItem.close();

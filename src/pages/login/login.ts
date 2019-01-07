@@ -5,6 +5,12 @@ import { ApiProvider } from './../../providers/api/api';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { Storage } from '@ionic/storage';
 
+/**
+ * 
+ * Class for the LoginPage
+ * 
+ */
+
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
@@ -19,12 +25,14 @@ export class LoginPage {
         private googlePlus: GooglePlus) {
     }
 
+    // facebook login is clicked, execute the Native facebook login
     facebookLogin(){
         this.fb.login(['public_profile', 'email'])
         .then((res: FacebookLoginResponse) => this.loginSuccess('facebook', res))
         .catch(e => this.loginError('facebook', e));
     }
 
+    // google login is clicked, execute the Native google login
     googleLogin(){
         this.googlePlus.login({
             'webClientId': '879252245494-1fesbuajkhkr8690j99i3ekmu9bspc70.apps.googleusercontent.com',
@@ -34,12 +42,14 @@ export class LoginPage {
         .catch(err => this.loginError('google', err));
     }
 
+    // test login is clicked
+    // only for development
     testLogin(){
         this.loginSuccess('test', 'test');
     }
 
+    // Login success, based on the provider clicked create the request for the RestAPI
     loginSuccess(provider, res){
-
         switch(provider){
             case 'google':
             this.authRestApi(
@@ -79,9 +89,9 @@ export class LoginPage {
             );
             break;
         }
-
     }
 
+    // get the userid from the RestAPI
     authRestApi( provider, providerid, useremail, userfullname ){
 
         this.storage.set('provier', provider);
@@ -100,6 +110,7 @@ export class LoginPage {
 
     }
 
+    // if any errors during login, show alert
     loginError(provider, err){
         console.log(err);
         const alert = this.alertCtrl.create({
@@ -110,8 +121,8 @@ export class LoginPage {
         alert.present();
     }
 
+    // logout is clicked, empty storage
     logout(){
-
         switch(window.localStorage.provider){
             case 'google':
             this.googlePlus.logout();
@@ -124,12 +135,11 @@ export class LoginPage {
             case 'test':
             break;
         }
-
         this.storage.clear();
         this.viewCtrl.dismiss(false);
-
     }
 
+    // dismiss modal is clicked, back to the previous page with false
     dismiss() {
         this.viewCtrl.dismiss(false);
     }

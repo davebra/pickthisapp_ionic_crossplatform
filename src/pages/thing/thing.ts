@@ -5,6 +5,12 @@ import { ApiProvider } from './../../providers/api/api';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
 
+/**
+ * 
+ * Class for the ThingPage
+ * 
+ */
+
 @Component({
   selector: 'page-thing',
   templateUrl: 'thing.html'
@@ -12,14 +18,14 @@ import { LoginPage } from '../login/login';
 export class ThingPage {
   @ViewChild(Slides) slides: Slides;
 
-  private thing = {};
-  private images = [];
-  private tags = [];
-  private availability;
-  private latitude;
-  private longitude;
-  private userid;
-  imagesBaseUrl = process.env.S3_BUCKET_URL;
+  private thing = {}; // object from the home page
+  private images = []; // images for the angular template
+  private tags = []; // tags for the angular template
+  private availability; // availability for the angular template
+  private latitude; // device position 
+  private longitude; // device position 
+  private userid; // user id
+  imagesBaseUrl = process.env.S3_BUCKET_URL; // base url for the images
 
   constructor(
     public navCtrl: NavController,
@@ -30,12 +36,14 @@ export class ThingPage {
     private apiProvider: ApiProvider,
     private storage: Storage,
     public navParams: NavParams) {
+      // get the data from the homepage
       this.thing = navParams.get('thing');
       this.latitude = navParams.get('userLatitude');
       this.longitude = navParams.get('userLongitude');
   }
   
   ionViewDidLoad(){
+    // set the data for the template
     this.images = this.thing["images"];
     this.tags = this.thing["tags"];
     switch(this.thing["availability"]){
@@ -54,6 +62,8 @@ export class ThingPage {
     }   
   }
 
+  // open the navigator app ( GoogleMaps, AppleMaps, etc )
+  // doesn't work with the browser
   openTheNavigator(){
     let options: LaunchNavigatorOptions = {
       start: [this.latitude, this.longitude],
@@ -67,8 +77,8 @@ export class ThingPage {
     );
   }
 
+  // if Report inappropriate is clicked, check Login befor show the actionSheet
   reportInappropriateCheckLogin(){
-
     this.storage.get("userid").then((val) => {
       if(typeof val !== "string"){
         let profileModal = this.modalCtrl.create(LoginPage);
@@ -83,10 +93,11 @@ export class ThingPage {
         this.userid = val;
         this.reportInappropriate();
       }
-    });
-    
+    }); 
   }
 
+  // report inappropriate actionsheet
+  // based on button clicked, send the edit of the status to the RestAPI
   reportInappropriate() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Report this Thing',

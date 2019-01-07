@@ -11,25 +11,32 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
 
-declare const google;
+/**
+ * 
+ * Class for the AddPage
+ * 
+ */
+
+declare const google; // google object delaration
+
 @Component({
   selector: 'page-add',
   templateUrl: 'add.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush // necessary for the tag component
 })
 export class AddPage {
   @ViewChild('selectposition') mapElement: ElementRef;
   @ViewChild('tagInput') tagInput: ElementRef;
 
-  latitude;
-  longitude;
-  pictures = [];
-  pictureNames = [];
-  picturesUploaded = 0;
-  tags = [];
-  userid;
-  private map;
-  private loading;
+  latitude; // device location
+  longitude; // device location
+  pictures = []; // pictures DATA_URI array
+  pictureNames = []; // picture names array
+  picturesUploaded = 0; // how many pictures have been uploaded
+  tags = []; // tags array
+  userid; // user id
+  private map; // google map object
+  private loading; // loading variable (true/false)
 
   constructor(
     public navCtrl: NavController,
@@ -59,8 +66,8 @@ export class AddPage {
     this.checkLogin();
   }
 
+  // check if a userid is present in the storage, if not open the login modal
   checkLogin(){
-
     this.storage.get("userid").then((val) => {
       if(typeof val !== "string"){
         let profileModal = this.modalCtrl.create(LoginPage);
@@ -75,15 +82,13 @@ export class AddPage {
         this.userid = val;
       }
     });
-    
   }
 
   loadMap(){
 
-    let latLng = new google.maps.LatLng(this.latitude, this.longitude);
- 
+    // initialise the map 
     let mapOptions = {
-      center: latLng,
+      center: new google.maps.LatLng(this.latitude, this.longitude),
       zoom: 15,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       disableDefaultUI: true,
@@ -99,13 +104,14 @@ export class AddPage {
         }
       ]
     }
-
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
+    // onche the map is loaded, load position
     google.maps.event.addListenerOnce(this.map, 'tilesloaded', (event) => {
       this.loadPosition();
     });
 
+    // every time the map is moved, get the the new centre
     google.maps.event.addListener(this.map, 'idle', (event) => {
       var newCenter = this.map.getCenter();
       this.latitude = newCenter.lat();
@@ -114,50 +120,55 @@ export class AddPage {
 
   }
 
+  // load the device position and centre the map on it
   loadPosition(){
     this.geolocation.getCurrentPosition().then((pos) => {
-      let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-      this.map.panTo( latLng );
+      this.map.panTo( new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude) );
     });
   }
 
+  // function to execute for open camera
   onTakePicture() {
     const options: CameraOptions = {
       quality: 50,
       destinationType: this.camera.DestinationType.DATA_URL,
-      //destinationType: this.camera.DestinationType.NATIVE_URI,
-      //sourceType: Default is CAMERA. PHOTOLIBRARY : 0, CAMERA : 1, SAVEDPHOTOALBUM : 2,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
       saveToPhotoAlbum: false
     }
 
+    // once picture is captured, save in the array and generate a unique random name
     this.camera.getPicture(options).then((image) => {
       this.pictures.push(image);
       this.pictureNames.push( this.createFileName() + '.jpg' );
     });
   }
 
+  // function to pass a save URL to angular template
   getSafePicture(i){
     return this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + this.pictures[i]);
   }
 
+  // generate a unique pictures name using MD5 of timestamp + userid
   private createFileName() {
     var t = new Date().getTime();
     return Md5.hashStr( t.toString +  this.userid );
   }
 
+  // function to remove a picture
   removePicture(index){
     this.pictures.splice(index, 1);
     this.pictureNames.splice(index, 1);
   }
 
+  // function executed when a picture is added, scroll the page to the end
   scrollToTakePicture(){
     if (this.pictures.length < 5) {
       document.getElementById('imgscroll').scrollLeft = document.getElementById('imgadd').offsetLeft;
     }
   }
 
+  // function for the tag autocomplete, get from the RestAPI
   public requestAutocompleteTags = (text: string): Observable<Response> => {
     const url = `${process.env.RESTAPI_URL}/tags?tag=${text}`;
     return this.http
@@ -165,7 +176,9 @@ export class AddPage {
       .pipe( map( res => res['data'].map(tag => tag.name) ) );
   };
 
+  // function to execute the submit
   submitThisThing(){
+    // at least 1 picture must be present
     if (this.pictures.length < 1) {
       const alert = this.alertCtrl.create({
         title: 'Required Pictures',
@@ -175,6 +188,7 @@ export class AddPage {
       alert.present();
       return;
     }
+    // at least 1 tag must be present
     if (this.tags.length < 1) {
       const alert = this.alertCtrl.create({
         title: 'Required Tags',
@@ -185,8 +199,10 @@ export class AddPage {
       return;
     }
 
+    // show loading alert
     this.loading.present();
 
+    // upload each picture
     this.pictures.forEach((element, index) => {
       this.apiProvider.uploadImage(element, this.pictureNames[index] ,this.userid).then(res => {
         this.picturesUploaded++;
@@ -194,6 +210,7 @@ export class AddPage {
       });
     });
 
+    // upload the thing object
     this.apiProvider.addThings(
       this.userid, 
       "pick", 
@@ -205,6 +222,7 @@ export class AddPage {
     });
   }
 
+  // check if all the pictures have been uploaded, if so hide the loading alert, empty the page and go to YourPage
   checkUploaded(){
     if( this.picturesUploaded >= this.pictureNames.length){
       this.loading.dismiss();
@@ -229,10 +247,10 @@ export class AddPage {
     }
   }
 
+  // tag component seems doesn't take the model with the tags array in here, so add/remove tag executing the functions here
   onItemAdded(e){
     this.tags.push( e.value.toLowerCase() );
   }
-
   onItemRemoved(e){
     var index = this.tags.indexOf( e.value.toLowerCase() );
     if (index > -1) {

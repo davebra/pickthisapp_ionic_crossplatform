@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
  
+/**
+ * 
+ * Class with the method for call the PickThisApp RestAPI
+ * 
+ * All functions return a prmoise to use with .then()]
+ * 
+ */
+
 @Injectable()
 export class ApiProvider {
  
