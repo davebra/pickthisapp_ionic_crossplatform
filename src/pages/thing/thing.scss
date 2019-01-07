@@ -1,7 +1,7 @@
 page-thing {
     #slideshow{
         height: 50vh;
-        background-color: #000;
+        background-color: color($colors, dark, base);
         img{
             object-fit: contain;
         }
@@ -10,10 +10,10 @@ page-thing {
     .tag{
         display: inline-block;
         text-transform: capitalize;
-        background-color: color($colors, light, base);
+        background-color: color($colors, secondary, base);
         margin: 0 10px 10px 0;
         font-size: 1.7rem;
-        color: color($colors, dark, base);
+        color: color($colors, light, base);
         padding: 4px 8px;
         border-radius: 4px;
     }

@@ -1,3 +1,13 @@
 page-your {
 
+    .thing-tag{
+        display: inline-block;
+        text-transform: capitalize;
+        background-color: color($colors, secondary, base);
+        margin: 2px 4px 0 0;
+        color: color($colors, light, base);
+        padding: 1px 5px;
+        border-radius: 3px;
+    }
+
 }

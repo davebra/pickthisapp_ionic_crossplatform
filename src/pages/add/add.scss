@@ -37,9 +37,13 @@ page-add {
             border-radius: 2px;
             height: 100%;
             width: 100%;
-            overflow: hidden;
+            background-color: #000;
             img{
                 object-fit: cover;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
             }
         }
 
@@ -54,9 +58,12 @@ page-add {
 
     }
     
-    #selectposition {
+    #selectpositionContainer {
         background-color: color($colors, light, base);
         position: relative;
+        min-height: 100px; 
+        height: 30vh; 
+        width: 100%;
     }
 
     #centremarker{

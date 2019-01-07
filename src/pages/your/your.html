@@ -1,8 +1,8 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Your Things
-    </ion-title>
+        <ion-icon name="custom-logo"></ion-icon>
+      </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -12,17 +12,19 @@
             Your posted things: {{thingscount}}
           </ion-list-header>
 
-        <ion-item-sliding *ngFor="let key of Object.keys(things)" id="map-card-{{key}}" #item>
+        <ion-item-sliding *ngFor="let key of Object.keys(things)" #slidingItem>
           <ion-item>
             <ion-thumbnail item-start>
-              <img src="img/thumbnail-totoro.png">
+              <img [src]="imagesBaseUrl + things[key].images[0]">
             </ion-thumbnail>
-            <h2>My Neighbor Totoro</h2>
-            <p>Hayao Miyazaki • 1988</p>
-            <button ion-button clear item-end>View</button>
+            <h2>Thing of {{things[key].timestamp | date: 'dd-MM-yyyy'}}</h2>
+            <p><span class="thing-tag" *ngFor="let tag of things[key].tags">{{tag}}</span></p>
+            <p *ngIf="things[key].status == 'paused'" clear item-end>Paused</p>
           </ion-item>
-          <ion-item-options side="left">
-            <button ion-button color="danger" (click)="deleteThing(key)"><ion-icon name="trash"></ion-icon></button>
+          <ion-item-options side="right">
+              <button *ngIf="things[key].status == 'paused'" ion-button color="light" (click)="playThing(key, slidingItem)"><ion-icon name="play"></ion-icon> Resume</button>
+              <button *ngIf="things[key].status == 'live'" ion-button color="light" (click)="pauseThing(key, slidingItem)"><ion-icon name="pause"></ion-icon> Pause</button>
+              <button ion-button color="danger" (click)="deleteThing(key)"><ion-icon name="trash"></ion-icon> Delete</button>
           </ion-item-options>
         </ion-item-sliding>
 

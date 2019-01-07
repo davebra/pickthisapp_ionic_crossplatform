@@ -1,16 +1,30 @@
 // http://ionicframework.com/docs/theming/
 
+.toplogo{
+    width: 130px;
+    height: auto;
+    margin-top: 7px;
+}
 
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
+ion-icon {
+    &[class*="custom-logo"] {
+        mask-image: url(../assets/textlogo.svg);
+        mask-size: contain;
+        mask-position: 50% 50%;
+        mask-repeat: no-repeat;
+        background: color($colors, primary, base);
+        width: 130px;
+        height: 27px;
+        margin-top: 7px;
+    }
+    &[class*="custom-logo-white"] {
+        mask-image: url(../assets/textlogo.svg);
+        mask-size: contain;
+        mask-position: 50% 50%;
+        mask-repeat: no-repeat;
+        background: #FFF;
+        width: 130px;
+        height: 27px;
+        margin-top: 7px;
+    }  
+}

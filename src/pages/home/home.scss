@@ -9,4 +9,22 @@ page-home {
         visibility: hidden;
     }
 
+    .thing-img{
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .thing-tag{
+        display: inline-block;
+        text-transform: capitalize;
+        background-color: color($colors, secondary, base);
+        margin: 2px 4px 0 0;
+        color: color($colors, light, base);
+        padding: 1px 5px;
+        border-radius: 3px;
+    }
+
 }

@@ -48,12 +48,12 @@ export class ApiProvider {
         });
     }
 
-    deleteThings(thingid, userid) {
+    changeThingStatus(thingid, userid, status) {
         return new Promise((resolve, reject) => {
 
             let postData = {
-                "userid": userid,
-                "status": "deleted"
+                "user": userid,
+                "status": status
             }
     
             this.http.post( process.env.RESTAPI_URL + "/things/" + thingid, postData)
@@ -66,16 +66,16 @@ export class ApiProvider {
         });
     }
 
-
-    uploadImage(file, userid) {
+    uploadImage(image, imagename, userid) {
         return new Promise((resolve, reject) => {
 
             let postData = {
-                "userid": userid,
-                "status": "deleted"
+                "user": userid,
+                "imagename": imagename,
+                "image": image
             }
     
-            this.http.post( process.env.RESTAPI_URL + "/things", postData)
+            this.http.post( process.env.RESTAPI_URL + "/upload", postData)
             .subscribe(res => {
                 resolve(res);
             }, error => {
@@ -91,7 +91,7 @@ export class ApiProvider {
             let postData = {
                 "user": userid,
                 "type": type,
-                "lat":lat,
+                "lat": lat,
                 "lng": lng,
                 "tags": tags,
                 "images": images

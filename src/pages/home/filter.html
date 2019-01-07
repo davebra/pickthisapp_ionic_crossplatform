@@ -1,8 +1,8 @@
 <ion-list>
-    <ion-list-header>Refine Things</ion-list-header>
+    <ion-list-header>Refine Results</ion-list-header>
   <ion-item>
     <ion-label>Availability</ion-label>
-    <ion-select [(ngModel)]="availability">
+    <ion-select [(ngModel)]="availability" (ionChange)="onChange()">
       <ion-option value="all" selected>All</ion-option>
       <ion-option value="full">There's everything</ion-option>
       <ion-option value="medium">Most still there</ion-option>

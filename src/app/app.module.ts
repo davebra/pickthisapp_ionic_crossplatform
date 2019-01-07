@@ -28,6 +28,7 @@ import { YourPage } from '../pages/your/your';
 import { ThingPage } from '../pages/thing/thing';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
+import { IntroPage } from '../pages/intro/intro';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { LoginPage } from '../pages/login/login';
     ThingPage,
     FilterPage,
     LoginPage,
+    IntroPage,
     TabsPage
   ],
   imports: [
@@ -63,6 +65,7 @@ import { LoginPage } from '../pages/login/login';
     ThingPage,
     FilterPage,
     LoginPage,
+    IntroPage,
     TabsPage
   ],
   providers: [

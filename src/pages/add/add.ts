@@ -1,9 +1,6 @@
 import { Component, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-import { NavController, ModalController, AlertController, Tabs, ToastController } from 'ionic-angular';
+import { NavController, ModalController, LoadingController, AlertController, Tabs, ToastController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { File } from '@ionic-native/file';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
-import { FilePath } from '@ionic-native/file-path';
 import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
 import { ApiProvider } from './../../providers/api/api';
@@ -12,8 +9,9 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
-import { uuidv3 } from 'uuid/v3';
+import { Md5 } from 'ts-md5/dist/md5';
 
+declare const google;
 @Component({
   selector: 'page-add',
   templateUrl: 'add.html',
@@ -21,22 +19,26 @@ import { uuidv3 } from 'uuid/v3';
 })
 export class AddPage {
   @ViewChild('selectposition') mapElement: ElementRef;
+  @ViewChild('tagInput') tagInput: ElementRef;
 
-  private latitude;
-  private longitude;
-  private pictures = [];
-  private tags = [];
-  private userid;
+  latitude;
+  longitude;
+  pictures = [];
+  pictureNames = [];
+  picturesUploaded = 0;
+  tags = [];
+  userid;
+  private map;
+  private loading;
 
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
     private geolocation: Geolocation,
     private camera: Camera,
-    private transfer: Transfer, 
-    private file: File, 
-    private filePath: FilePath,
+    private _sanitizer: DomSanitizer,
     public http: HttpClient,
+    public loadingCtrl: LoadingController,
     public apiProvider: ApiProvider,
     private storage: Storage,
     public toastCtrl: ToastController,
@@ -44,23 +46,13 @@ export class AddPage {
     ) {
       this.latitude = -37.814;
       this.longitude = 144.96332;
+      this.loading = this.loadingCtrl.create({
+        content: 'Uploading your Thing...'
+      });
   }
 
   ionViewDidLoad() {
     this.loadMap();
-    this.geolocation.getCurrentPosition().then((resp) => {
-          
-      this.latitude = resp.coords.latitude;
-      this.longitude = resp.coords.longitude;
-
-      // this.map.moveCamera({
-      //   target: new LatLng( this.latitude, this.longitude),
-      //   zoom: 14
-      // });
-
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
   }
 
   ionViewWillEnter(){
@@ -86,105 +78,84 @@ export class AddPage {
     
   }
 
+  loadMap(){
+
+    let latLng = new google.maps.LatLng(this.latitude, this.longitude);
+ 
+    let mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      zoomControl: true,
+      styles: [
+        {
+          featureType: 'poi',
+          stylers: [{visibility: 'off'}]
+        },
+        {
+          featureType: 'transit',
+          stylers: [{visibility: 'off'}]
+        }
+      ]
+    }
+
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+    google.maps.event.addListenerOnce(this.map, 'tilesloaded', (event) => {
+      this.loadPosition();
+    });
+
+    google.maps.event.addListener(this.map, 'idle', (event) => {
+      var newCenter = this.map.getCenter();
+      this.latitude = newCenter.lat();
+      this.longitude = newCenter.lng();
+    });
+
+  }
+
+  loadPosition(){
+    this.geolocation.getCurrentPosition().then((pos) => {
+      let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+      this.map.panTo( latLng );
+    });
+  }
+
   onTakePicture() {
     const options: CameraOptions = {
       quality: 50,
-      //destinationType: this.camera.DestinationType.DATA_URL,
-      destinationType: this.camera.DestinationType.NATIVE_URI,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      //destinationType: this.camera.DestinationType.NATIVE_URI,
       //sourceType: Default is CAMERA. PHOTOLIBRARY : 0, CAMERA : 1, SAVEDPHOTOALBUM : 2,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      saveToPhotoAlbum: false,
-      correctOrientation: true
+      saveToPhotoAlbum: false
     }
 
-    this.camera.getPicture(options).then((imagePath) => {
-      //this.pictures.push('data:image/jpeg;base64,' + imageData);
-      //this.pictures.push(imageData);
-      console.log(imagePath);
-
-      var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-      var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-
-      //this.file.readAsDataURL(correctPath, currentName).then(res => console.log(res)  );
-
-      this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-      }, (err) => {
-      console.log(err);
+    this.camera.getPicture(options).then((image) => {
+      this.pictures.push(image);
+      this.pictureNames.push( this.createFileName() + '.jpg' );
     });
+  }
+
+  getSafePicture(i){
+    return this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + this.pictures[i]);
   }
 
   private createFileName() {
     var t = new Date().getTime();
-    return t + '.jpg';
-  }
-   
-  // Copy the image to a local folder
-  private copyFileToLocalDir(namePath, currentName, newFileName) {
-    this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
-      this.pictures.push(newFileName);
-    }, error => {
-      console.log(error);
-    }).catch(err => console.log(err) );
-  }
-
-  public uploadImage(image) {
-    // Destination URL
-    var url = process.env.RESTAPI_URL + "/upload";
-   
-    // File for Upload
-    var targetPath = this.pathForImage(image);
-   
-    var options = {
-      fileKey: "file",
-      fileName: image,
-      chunkedMode: false,
-      mimeType: "multipart/form-data",
-      params : { 'file': image, 'user': this.userid, 'imagename': image }
-    };
-   
-    const fileTransfer: TransferObject = this.transfer.create();
-   
-    // Use the FileTransfer to upload the image
-    fileTransfer.upload(targetPath, url, options).then(data => {
-      // 'Image succesful uploaded.'
-      console.log(data);
-    }, err => {
-      // 'Error while uploading file.'
-      console.log(err);
-    });
-  }
-
-  // Always get the accurate path to your apps folder
-  public pathForImage(img) {
-    if (img === null) {
-      return '';
-    } else {
-      return this.file.dataDirectory + img;
-    }
+    return Md5.hashStr( t.toString +  this.userid );
   }
 
   removePicture(index){
     this.pictures.splice(index, 1);
+    this.pictureNames.splice(index, 1);
   }
 
   scrollToTakePicture(){
     if (this.pictures.length < 5) {
       document.getElementById('imgscroll').scrollLeft = document.getElementById('imgadd').offsetLeft;
     }
-  }
-
-  loadMap() {
-
-    let element = this.mapElement.nativeElement;
-    
-    // this.map =this.googleMaps.create(element);
-
-    // this.map.on(GoogleMapsEvent.CAMERA_MOVE_END).subscribe((camera) => {
-    //   this.latitude = camera[0].target.lat;
-    //   this.longitude = camera[0].target.lng;
-    // });
-
   }
 
   public requestAutocompleteTags = (text: string): Observable<Response> => {
@@ -199,7 +170,7 @@ export class AddPage {
       const alert = this.alertCtrl.create({
         title: 'Required Pictures',
         subTitle: 'You need to upload at least one picture.',
-        buttons: ['ADD PICTURES']
+        buttons: ['Add Pictures']
       });
       alert.present();
       return;
@@ -208,14 +179,19 @@ export class AddPage {
       const alert = this.alertCtrl.create({
         title: 'Required Tags',
         subTitle: 'You need to select at least one tag.',
-        buttons: ['ADD TAGS']
+        buttons: ['Add Tags']
       });
       alert.present();
       return;
     }
 
-    this.pictures.forEach(img => {
-      this.uploadImage(img);
+    this.loading.present();
+
+    this.pictures.forEach((element, index) => {
+      this.apiProvider.uploadImage(element, this.pictureNames[index] ,this.userid).then(res => {
+        this.picturesUploaded++;
+        this.checkUploaded();
+      });
     });
 
     this.apiProvider.addThings(
@@ -224,23 +200,44 @@ export class AddPage {
       this.latitude, 
       this.longitude, 
       this.tags,
-      this.pictures).then(res => {
-        if(res['status'] === 'success'){
-          console.log(res);
-        } else {
-            console.log(res);
-        }
+      this.pictureNames).then(res => {
+        console.log(res);
     });
-
   }
 
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: 'top'
-    });
-    toast.present();
+  checkUploaded(){
+    if( this.picturesUploaded >= this.pictureNames.length){
+      this.loading.dismiss();
+      const alert = this.alertCtrl.create({
+        title: 'Success!',
+        subTitle: 'You thing has been uploaded.',
+        buttons: [
+          {
+            text: 'Close',
+            handler: () => {
+              console.log('Cancel clicked');
+              this.tags = [];
+              this.pictureNames = [];
+              this.pictures = [];
+              var t: Tabs = this.navCtrl.parent;
+              t.select(2);
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+  }
+
+  onItemAdded(e){
+    this.tags.push( e.value.toLowerCase() );
+  }
+
+  onItemRemoved(e){
+    var index = this.tags.indexOf( e.value.toLowerCase() );
+    if (index > -1) {
+      this.tags.splice(index, 1);
+    }
   }
 
 }

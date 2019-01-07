@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar>
+    <ion-title>
+        <ion-icon name="custom-logo"></ion-icon>
+    </ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()">Skip</button>
+    </ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <ion-slides pager>
+        <ion-slide>
+            <img style="max-width: 180px;" src="assets/imgs/intro1.png" />
+            <h3>Find things for free!</h3>
+            <p>With PickThisApp you can find free things around you, that people posted here.</p>
+        </ion-slide>
+        <ion-slide> 
+            <img src="assets/imgs/intro2.png" />
+            <h3>Pick this up first!</h3>
+            <p>When you find something interesting and you want to go there, tap "Drive me here" to open your navigator.</p>
+        </ion-slide>
+        <ion-slide>
+            <img src="assets/imgs/intro3.png" />
+            <h3>Have something to give for free?</h3>
+            <p>Post a free thing here is super-easy! Take a picture, adjust the position, select some tags, and post!</p>
+            <button ion-button (click)="dismiss()">Get Started</button>
+        </ion-slide>
+    </ion-slides>
+
+</ion-content>
+      
