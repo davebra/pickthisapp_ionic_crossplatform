@@ -121,24 +121,6 @@ export class LoginPage {
         alert.present();
     }
 
-    // logout is clicked, empty storage
-    logout(){
-        switch(window.localStorage.provider){
-            case 'google':
-            this.googlePlus.logout();
-
-            break;
-            case 'facebook':
-            this.fb.logout();
-            
-            break;
-            case 'test':
-            break;
-        }
-        this.storage.clear();
-        this.viewCtrl.dismiss(false);
-    }
-
     // dismiss modal is clicked, back to the previous page with false
     dismiss() {
         this.viewCtrl.dismiss(false);

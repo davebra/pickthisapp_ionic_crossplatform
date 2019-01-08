@@ -63,6 +63,8 @@ export class YourPage {
             this.things[thing._id] = thing;
           }
         });
+      } else {
+        console.log(res);
       }
     });
   }
@@ -95,6 +97,15 @@ export class YourPage {
         this.things[thingid].status = 'live';
       }
     });
+  }
+
+  // logout is clicked, empty storage and back to home
+  logout(){
+    this.storage.clear();
+    this.things = {};
+    this.thingscount = 'loading...';
+    var t: Tabs = this.navCtrl.parent;
+    t.select(0);
   }
   
 
