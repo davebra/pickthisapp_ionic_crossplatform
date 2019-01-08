@@ -74,6 +74,24 @@ export class ApiProvider {
         });
     }
 
+    changeThingAvailability(thingid, userid, av) {
+        return new Promise((resolve, reject) => {
+
+            let postData = {
+                "user": userid,
+                "availability": av
+            }
+    
+            this.http.post( process.env.RESTAPI_URL + "/things/" + thingid, postData)
+            .subscribe(res => {
+                resolve(res);
+            }, error => {
+                reject(error);
+            });
+
+        });
+    }
+
     uploadImage(image, imagename, userid) {
         return new Promise((resolve, reject) => {
 

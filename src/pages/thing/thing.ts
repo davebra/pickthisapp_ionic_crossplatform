@@ -156,4 +156,79 @@ export class ThingPage {
     actionSheet.present();
   }
 
+  // report inappropriate actionsheet
+  // based on button clicked, send the edit of the status to the RestAPI
+  updateAvailability() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Update thing\'s availability',
+      buttons: [
+        {
+          text: 'Everything\'s there',
+          handler: () => {
+            this.apiProvider.changeThingAvailability(this.thing['_id'], this.userid, 'full').then(res => {
+              const alert = this.alertCtrl.create({
+                title: 'Success',
+                subTitle: 'Availability updated!.',
+                buttons: ['Close']
+              });
+              alert.present();
+              this.availability = 'Everything\'s there';
+            });
+          }
+        },
+        {
+          text: 'Most things stills there',
+          handler: () => {
+            this.apiProvider.changeThingAvailability(this.thing['_id'], this.userid, 'medium').then(res => {
+              const alert = this.alertCtrl.create({
+                title: 'Success',
+                subTitle: 'Availability updated!.',
+                buttons: ['Close']
+              });
+              alert.present();
+              this.availability = 'Most things stills there';
+            });
+          }
+        },
+        {
+          text: 'Something\'s left',
+          handler: () => {
+            this.apiProvider.changeThingAvailability(this.thing['_id'], this.userid, 'low').then(res => {
+              const alert = this.alertCtrl.create({
+                title: 'Success',
+                subTitle: 'Availability updated!.',
+                buttons: ['Close']
+              });
+              alert.present();
+              this.availability = 'Something\'s left';
+            });
+          }
+        },
+        {
+          text: 'Everything\'s gone',
+          handler: () => {
+            this.apiProvider.changeThingAvailability(this.thing['_id'], this.userid, 'empty').then(res => {
+              const alert = this.alertCtrl.create({
+                title: 'Success',
+                subTitle: 'Availability updated!.',
+                buttons: ['Close']
+              });
+              alert.present();
+              this.availability = 'Everything\'s gone';
+            });
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+ 
+    actionSheet.present();
+  }
+
 }

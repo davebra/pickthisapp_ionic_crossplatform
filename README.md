@@ -22,7 +22,7 @@ PickThisApp Ionic App, Assignment 1 project for the Cross Platform subject, Bach
 
 * `npm run browser` to start the app for the browser
 * `ionic cordova emulate android` install the package for android emulator of device if connected
-* `ionic cordova emulate ios` install the package for ios emulator
+* `ionic cordova emulate ios -- --buildFlag="-UseModernBuildSystem=0"` install the package for ios emulator
 
 #### Limitations
 
