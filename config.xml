@@ -113,7 +113,7 @@
         <variable name="LOCATION_USAGE_DESCRIPTION" value="This app requires access to your location for navigation purposes" />
     </plugin>
     <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
-    <plugin name="cordova-plugin-camera" spec="git+https://github.com/apache/cordova-plugin-camera.git">
+    <plugin name="cordova-plugin-camera" spec="https://github.com/apache/cordova-plugin-camera.git">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Take picture to publish things" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Select picture to publish things" />
@@ -121,6 +121,12 @@
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
     <plugin name="cordova-plugin-filepath" spec="1.5.1" />
+    <plugin name="cordova-plugin-ios-camera-permissions" spec="1.2.0">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="Take photo to post things" />
+        <variable name="MICROPHONE_USAGE_DESCRIPTION" value="Take photo to post things" />
+        <variable name="PHOTOLIBRARY_ADD_USAGE_DESCRIPTION" value="Take photo to post things" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Take photo to post things" />
+    </plugin>
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />

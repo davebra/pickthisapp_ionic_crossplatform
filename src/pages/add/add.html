@@ -10,14 +10,14 @@
 
   <div id="imgscroll">
         
-    <div imgbox *ngFor="let picture of pictures; let i = index" [attr.ready]="scrollToTakePicture()">
+    <div imgbox *ngFor="let p of pictureNames; let i = index;">
         <div imgcontent>
             <img [src]="getSafePicture(i)" />
         </div>
         <ion-icon class="imgdelete" name="md-remove-circle" (click)="removePicture(i)"></ion-icon>
     </div>
 
-    <div imgbox id="imgadd" (click)="onTakePicture()" *ngIf="pictures.length < 5">
+    <div imgbox id="imgadd" (click)="takePictureOrGallery()" *ngIf="pictures.length < 6">
         <ion-icon name="camera"></ion-icon>
     </div>
       

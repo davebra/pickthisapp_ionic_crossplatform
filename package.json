@@ -48,6 +48,7 @@
     "cordova-plugin-googleplus": "git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "2.3.1",
+    "cordova-plugin-ios-camera-permissions": "1.2.0",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
@@ -86,7 +87,9 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-plugin-camera": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+        "ANDROID_SUPPORT_V4_VERSION": "27.+",
+        "CAMERA_USAGE_DESCRIPTION": "Take picture to publish things",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "Select picture to publish things"
       },
       "cordova-plugin-googleplus": {
         "REVERSED_CLIENT_ID": "com.googleusercontent.apps.879252245494-ee3djcmpqf0uv6tl4l6rlc9d9obcob05",
@@ -100,7 +103,13 @@
       "cordova-plugin-geolocation": {},
       "cordova-plugin-file": {},
       "cordova-plugin-file-transfer": {},
-      "cordova-plugin-filepath": {}
+      "cordova-plugin-filepath": {},
+      "cordova-plugin-ios-camera-permissions": {
+        "CAMERA_USAGE_DESCRIPTION": "Take photo to post things",
+        "MICROPHONE_USAGE_DESCRIPTION": "Take photo to post things",
+        "PHOTOLIBRARY_ADD_USAGE_DESCRIPTION": "Take photo to post things",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "Take photo to post things"
+      }
     },
     "platforms": [
       "browser",

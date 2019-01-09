@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-import { NavController, ModalController, LoadingController, AlertController, Tabs, ToastController } from 'ionic-angular';
+import { NavController, ModalController, LoadingController, AlertController, Tabs, ToastController, ActionSheetController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
@@ -30,8 +30,8 @@ export class AddPage {
 
   latitude; // device location
   longitude; // device location
-  pictures = []; // pictures DATA_URI array
-  pictureNames = []; // picture names array
+  public pictures = []; // pictures DATA_URI array
+  public pictureNames = []; // picture names array
   picturesUploaded = 0; // how many pictures have been uploaded
   tags = []; // tags array
   userid; // user id
@@ -46,11 +46,14 @@ export class AddPage {
     private _sanitizer: DomSanitizer,
     public http: HttpClient,
     public loadingCtrl: LoadingController,
+    public actionCtrl: ActionSheetController,
     public apiProvider: ApiProvider,
     private storage: Storage,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController
     ) {
+      this.pictures = []; // pictures DATA_URI array
+      this.pictureNames = [];
       this.latitude = -37.814;
       this.longitude = 144.96332;
       this.loading = this.loadingCtrl.create({
@@ -127,21 +130,76 @@ export class AddPage {
     });
   }
 
+  // actionsheet for select if user want to open the camera or the gallery
+  takePictureOrGallery() {
+    let actionSheet = this.actionCtrl.create({
+      title: 'Select Action',
+      buttons: [
+        {
+          text: 'Take Picture',
+          handler: () => {
+            this.onTakePicture();
+          }
+        },
+        {
+          text: 'Select from Gallery',
+          handler: () => {
+            this.onSelectPicture();            
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
   // function to execute for open camera
   onTakePicture() {
     const options: CameraOptions = {
-      quality: 50,
+      quality: 10,
+      targetWidth: 400,
+      targetHeight: 400,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
       saveToPhotoAlbum: false
     }
 
     // once picture is captured, save in the array and generate a unique random name
     this.camera.getPicture(options).then((image) => {
-      this.pictures.push(image);
-      this.pictureNames.push( this.createFileName() + '.jpg' );
+      this.pictureAdded(image);
     });
+  }
+
+  // function to execute for select picture from album
+  onSelectPicture() {
+    const options: CameraOptions = {
+      quality: 10,
+      targetWidth: 400,
+      targetHeight: 400,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+    }
+
+    // once picture is captured, save in the array and generate a unique random name
+    this.camera.getPicture(options).then((image) => {
+      this.pictureAdded(image);
+    });
+  }
+
+  pictureAdded(data){
+    this.pictures.push(data);
+    this.pictureNames.push( this.createFileName() + '.jpg' );
+    if (this.pictures.length < 5) {
+      document.getElementById('imgscroll').scrollLeft = document.getElementById('imgadd').offsetLeft;
+    }
   }
 
   // function to pass a save URL to angular template
@@ -159,13 +217,6 @@ export class AddPage {
   removePicture(index){
     this.pictures.splice(index, 1);
     this.pictureNames.splice(index, 1);
-  }
-
-  // function executed when a picture is added, scroll the page to the end
-  scrollToTakePicture(){
-    if (this.pictures.length < 5) {
-      document.getElementById('imgscroll').scrollLeft = document.getElementById('imgadd').offsetLeft;
-    }
   }
 
   // function for the tag autocomplete, get from the RestAPI
@@ -225,7 +276,7 @@ export class AddPage {
   // check if all the pictures have been uploaded, if so hide the loading alert, empty the page and go to YourPage
   checkUploaded(){
     if( this.picturesUploaded >= this.pictureNames.length){
-      this.loading.dismiss();
+      this.loading.dismiss().catch(()=>{})
       const alert = this.alertCtrl.create({
         title: 'Success!',
         subTitle: 'You thing has been uploaded.',

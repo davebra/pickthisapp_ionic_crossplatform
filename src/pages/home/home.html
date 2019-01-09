@@ -12,8 +12,6 @@
 </ion-header>
 
 <ion-content>
-
-  <div #map style="height: 100%; width: 100%;"></div>
   
   <div id="map_cards">
     <ion-slides (ionSlideDidChange)="slideChanged()">
@@ -23,7 +21,8 @@
                   <ion-grid>
                       <ion-row>
                         <ion-col col-4>
-                          <div class="thing-img" [style.background-image]="'url(' + imagesBaseUrl + things[key].images[0] +')'" (click)="goToThing(key)">
+                          <div class="thing-img" (click)="goToThing(key)">
+                            <img [src]="imagesBaseUrl + things[key].images[0]">
                           </div>
                         </ion-col>
                         <ion-col col-8>
@@ -45,5 +44,7 @@
       </ion-slide>
     </ion-slides>
   </div>
+
+  <div #map style="height: 100%; width: 100%;"></div>
 
 </ion-content>

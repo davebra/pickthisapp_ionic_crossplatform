@@ -1,7 +1,7 @@
 page-home {
 
     #map_cards{
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         max-height: 25%;
@@ -12,9 +12,13 @@ page-home {
     .thing-img{
         height: 100%;
         width: 100%;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        img{
+            object-fit: cover;
+            width: inherit !important;
+            max-width: inherit !important;
+            height: inherit !important;
+            max-height: inherit !important;
+        }
     }
 
     .thing-tag{
