@@ -187,12 +187,12 @@ export class HomePage {
     var radius = this.calculateDistance(ne.lat(), ne.lng(), sw.lat(), sw.lng());
 
     this.apiProvider.getThings(this.latitude, this.longitude, radius).then(res => {
-      this.toastLoading.dismiss().catch();
+      this.toastLoading.dismiss().catch(()=>{});
 
       if(res['status'] === 'success'){
-        this.toastZoom.dismiss().catch();
+        this.toastZoom.dismiss().catch(()=>{});
         if ( res['data'].length > 0 ){
-          this.toastNoThings.dismiss().catch();
+          this.toastNoThings.dismiss().catch(()=>{});
         } else {
           this.toastNoThings.present();
         }
@@ -269,6 +269,10 @@ export class HomePage {
       }
       this.arrayMarkers[currentIndex].setIcon(this.markerPinIcon('#F00'));
     }
+  }
+
+  backToMyPos(){
+    this.map.panTo( new google.maps.LatLng(this.latitude, this.longitude) );
   }
 
   // open the page Thing with the thing object data

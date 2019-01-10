@@ -11,6 +11,29 @@ page-add {
         }
     }
 
+    #backToMyPosition{
+        background: #fff;
+        display: block;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        position: absolute;
+        cursor: pointer;
+        user-select: none;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+        bottom: 10px;
+        left: 10px;
+        box-shadow: 0 0 6px #aaa;
+        border-radius: 3px;
+        svg{
+            width: 25px;
+            height: 25px;
+            margin-top: 2px;
+        }
+    }
+
     [imgbox] {
         flex: 0 0 auto;
         width: 30vw;
@@ -38,13 +61,9 @@ page-add {
             height: 100%;
             width: 100%;
             background-color: #000;
-            img{
-                object-fit: cover;
-                min-width: 100%;
-                min-height: 100%;
-                width: auto;
-                height: auto;
-            }
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
 
         .imgdelete{

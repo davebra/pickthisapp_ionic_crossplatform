@@ -10,9 +10,8 @@
 
   <div id="imgscroll">
         
-    <div imgbox *ngFor="let p of pictureNames; let i = index;">
-        <div imgcontent>
-            <img [src]="getSafePicture(i)" />
+    <div imgbox *ngFor="let p of pictures; let i = index">
+        <div imgcontent [style.background-image]="_sanitizer.bypassSecurityTrustStyle('url(data:image/jpg;base64,' + p + ')')">
         </div>
         <ion-icon class="imgdelete" name="md-remove-circle" (click)="removePicture(i)"></ion-icon>
     </div>
@@ -30,16 +29,20 @@
         <path d="M256,0c-70.703,0-128,57.313-128,128c0,51.5,30.563,95.563,74.375,115.875L256,512l53.625-268.125
           C353.438,223.563,384,179.5,384,128C384,57.313,326.688,0,256,0z M256,192c-35.344,0-64-28.656-64-64s28.656-64,64-64
           s64,28.656,64,64S291.344,192,256,192z"/>
-        </svg>
+      </svg>
+      <button id="backToMyPosition" (click)="loadPosition()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#666" d="M500 232h-29.334C459.597 131.885 380.115 52.403 280 41.334V12c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v29.334C131.885 52.403 52.403 131.885 41.334 232H12c-6.627 0-12 5.373-12 12v24c0 6.627 5.373 12 12 12h29.334C52.403 380.115 131.885 459.597 232 470.666V500c0 6.627 5.373 12 12 12h24c6.627 0 12-5.373 12-12v-29.334C380.115 459.597 459.597 380.115 470.666 280H500c6.627 0 12-5.373 12-12v-24c0-6.627-5.373-12-12-12zM280 422.301V380c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v42.301C158.427 411.84 100.154 353.532 89.699 280H132c6.627 0 12-5.373 12-12v-24c0-6.627-5.373-12-12-12H89.699C100.16 158.427 158.468 100.154 232 89.699V132c0 6.627 5.373 12 12 12h24c6.627 0 12-5.373 12-12V89.699C353.573 100.16 411.846 158.468 422.301 232H380c-6.627 0-12 5.373-12 12v24c0 6.627 5.373 12 12 12h42.301C411.84 353.573 353.532 411.846 280 422.301zM288 256c0 17.673-14.327 32-32 32s-32-14.327-32-32c0-17.673 14.327-32 32-32s32 14.327 32 32z"></path></svg>
+      </button>
   </div>
 
   <div padding>
     <h3>What's in here?</h3>
     <tag-input 
       [ngModel]="tags"
-      [placeholder]="'Add another tag'"
+      [placeholder]="'Add tags'"
       [onTextChangeDebounce]="200"
-      [secondaryPlaceholder]="'Add a tag'"
+      [secondaryPlaceholder]="'Add tags, comma separated'"
+      [separatorKeyCodes]="[188,13,190]"
       (onRemove)="onItemRemoved($event)"
       (onAdd)="onItemAdded($event)">
       <tag-input-dropdown 

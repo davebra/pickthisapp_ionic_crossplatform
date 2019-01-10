@@ -48,10 +48,10 @@ export class ThingPage {
     this.tags = this.thing["tags"];
     switch(this.thing["availability"]){
       case 'full':
-      this.availability = 'Everything\'s there';    
+      this.availability = 'Everything\'s here';    
       break;
       case 'medium':
-      this.availability = 'Most still there';    
+      this.availability = 'Most is still here';    
       break;
       case 'low':
       this.availability = 'Something left';    
@@ -71,8 +71,8 @@ export class ThingPage {
       destinationName: 'Pick This Thing Up'
     };
 
-    this.launchNavigator.navigate([this.thing['location'].coordinates[0], this.thing['location'].coordinates[1]], options).then(
-      success => console.log('Launched navigator'),
+    this.launchNavigator.navigate([this.thing['location'].coordinates[1], this.thing['location'].coordinates[0]], options).then(
+      success => console.log('Launched navigator', success),
       error => console.log('Error launching navigator', error)
     );
   }
@@ -154,6 +154,25 @@ export class ThingPage {
     });
  
     actionSheet.present();
+  }
+
+  // if Update Availability is clicked, check Login befor show the actionSheet
+  updateAvailabilityCheckLogin(){
+    this.storage.get("userid").then((val) => {
+      if(typeof val !== "string"){
+        let profileModal = this.modalCtrl.create(LoginPage);
+        profileModal.onDidDismiss((data:any) => {
+          if(!data){
+            var t: Tabs = this.navCtrl.parent;
+            t.select(0);
+          }
+        });
+        profileModal.present();
+      } else {
+        this.userid = val;
+        this.updateAvailability();
+      }
+    }); 
   }
 
   // report inappropriate actionsheet

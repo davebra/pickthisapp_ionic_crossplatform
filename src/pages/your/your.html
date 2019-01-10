@@ -23,6 +23,7 @@
             <h2>Thing of {{things[key].timestamp | date: 'dd-MM-yyyy'}}</h2>
             <p><span class="thing-tag" *ngFor="let tag of things[key].tags">{{tag}}</span></p>
             <p *ngIf="things[key].status == 'paused'" clear item-end>Paused</p>
+            <ion-icon name="arrow-back" item-end></ion-icon>
           </ion-item>
           <ion-item-options side="right">
               <button *ngIf="things[key].status == 'paused'" ion-button color="light" (click)="playThing(key, slidingItem)"><ion-icon name="play"></ion-icon> Resume</button>

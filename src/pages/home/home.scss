@@ -31,4 +31,27 @@ page-home {
         border-radius: 3px;
     }
 
+    #backToMyPos{
+        background: #fff;
+        display: block;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        position: absolute;
+        cursor: pointer;
+        user-select: none;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+        bottom: 10px;
+        left: 10px;
+        box-shadow: 0 0 6px #aaa;
+        border-radius: 3px;
+        svg{
+            width: 25px;
+            height: 25px;
+            margin-top: 2px;
+        }
+    }
+
 }

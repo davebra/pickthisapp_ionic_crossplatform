@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { NavController, ModalController, LoadingController, AlertController, Tabs, ToastController, ActionSheetController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { LoginPage } from '../login/login';
@@ -28,13 +28,13 @@ export class AddPage {
   @ViewChild('selectposition') mapElement: ElementRef;
   @ViewChild('tagInput') tagInput: ElementRef;
 
-  latitude; // device location
-  longitude; // device location
-  public pictures = []; // pictures DATA_URI array
-  public pictureNames = []; // picture names array
-  picturesUploaded = 0; // how many pictures have been uploaded
-  tags = []; // tags array
-  userid; // user id
+  private latitude; // device location
+  private longitude; // device location
+  private pictures = []; // pictures DATA_URL array
+  private pictureNames = []; // picture names array
+  private picturesUploaded = 0; // how many pictures have been uploaded
+  private tags = []; // tags array
+  private userid; // user id
   private map; // google map object
   private loading; // loading variable (true/false)
 
@@ -44,6 +44,7 @@ export class AddPage {
     private geolocation: Geolocation,
     private camera: Camera,
     private _sanitizer: DomSanitizer,
+    private chRef: ChangeDetectorRef,
     public http: HttpClient,
     public loadingCtrl: LoadingController,
     public actionCtrl: ActionSheetController,
@@ -52,7 +53,7 @@ export class AddPage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController
     ) {
-      this.pictures = []; // pictures DATA_URI array
+      this.pictures = [];
       this.pictureNames = [];
       this.latitude = -37.814;
       this.longitude = 144.96332;
@@ -194,17 +195,14 @@ export class AddPage {
     });
   }
 
-  pictureAdded(data){
-    this.pictures.push(data);
+  // add picture in the array, generate unique name
+  pictureAdded(image){
+    this.pictures.push(image);
+    this.chRef.detectChanges(); // force angular to get the changes
     this.pictureNames.push( this.createFileName() + '.jpg' );
-    if (this.pictures.length < 5) {
+    if (this.pictureNames.length < 5) {
       document.getElementById('imgscroll').scrollLeft = document.getElementById('imgadd').offsetLeft;
     }
-  }
-
-  // function to pass a save URL to angular template
-  getSafePicture(i){
-    return this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + this.pictures[i]);
   }
 
   // generate a unique pictures name using MD5 of timestamp + userid
